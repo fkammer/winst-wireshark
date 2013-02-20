@@ -1,0 +1,7 @@
+winst-wireshark (1.8.5-1.0) experimental; urgency=low
+
+  * Initial release.
+  * New upstream version 1.8.5
+  * New updtream version of WinPcap 4.12
+
+ -- IServ <info@iserv.eu>  Tue, 19 Feb 2013 16:18:19 +0100

@@ -1,0 +1,51 @@
+[Initial]
+Message=Installiere Wireshark...
+DefVar $ExitCode$
+DefVar $DesktopIcon$
+DefVar $QuicklaunchIcon$
+
+[Aktionen]
+ShowBitmap "%ScriptPath%\logo.png" "Wireshark"
+Sub_ValidateConfig
+Sub_Install
+
+[Sub_ValidateConfig]
+Set $DesktopIcon$ = GetProductProperty("desktopicon", "yes")
+if not ($DesktopIcon$ = "yes" or $DesktopIcon$ = "no")
+  LogError "Fatal: Invalid ProductProperty for desktopicon"
+  IsFatalError
+endif
+Set $QuicklaunchIcon$ = GetProductProperty("quicklaunchicon", "no")
+if not ($QuicklaunchIcon$ = "yes" or $QuicklaunchIcon$ = "no")
+  LogError "Fatal: Invalid ProductProperty for quicklaunchicon"
+  IsFatalError
+endif
+
+[Sub_Install]
+WinBatch_Install_WinPcap
+Sub_HandleExitCode_Install
+if (GetSystemType = "64 Bit System")
+	WinBatch_Install_Wireshark_64
+else
+	WinBatch_Install_Wireshark_32
+endif
+Sub_HandleExitCode_Install
+
+[WinBatch_Install_WinPcap]
+"%ScriptPath%\data\winpcap-nmap-4.12.exe" /S
+
+[WinBatch_Install_Wireshark_32]
+"%ScriptPath%\data\wireshark-win32-1.8.5.exe" /S /desktopicon=$DesktopIcon$ /quicklaunchicon=$QuicklaunchIcon$
+
+[WinBatch_Install_Wireshark_64]
+"%ScriptPath%\data\wireshark-win64-1.8.5.exe" /S /desktopicon=$DesktopIcon$ /quicklaunchicon=$QuicklaunchIcon$
+
+
+[Sub_HandleExitCode_Install]
+; check return code
+Set $ExitCode$ = GetLastExitCode
+comment "GetLastExitCode: " + $ExitCode$
+if not($ExitCode$ = "0")
+  LogError "Fatal: setup returned exit code " + $ExitCode$
+  IsFatalError
+endif

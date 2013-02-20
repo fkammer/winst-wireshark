@@ -1,0 +1,32 @@
+[Initial]
+Message=Deinstalliere Wireshark...
+DefVar $ExitCode$
+
+[Aktionen]
+ShowBitmap "%ScriptPath%\logo.png" "Wireshark"
+Sub_Uninstall
+
+[Sub_Uninstall]
+if FileExists("%ProgramFilesDir%\Wireshark\uninstall.exe")
+  WinBatch_Uninstall_Wireshark
+  Sub_HandleExitCode
+endif
+if FileExists("%ProgramFilesDir%\WinPcap\uninstall.exe") 
+  WinBatch_Uninstall_WinPcap
+  Sub_HandleExitCode
+endif
+
+[WinBatch_Uninstall_Wireshark]
+"%ProgramFilesDir%\Wireshark\uninstall.exe" /S
+
+[WinBatch_Uninstall_WinPcap]
+"%ProgramFilesDir%\WinPcap\uninstall.exe" /S
+
+[Sub_HandleExitCode]
+; check return code
+Set $ExitCode$ = GetLastExitCode
+comment "GetLastExitCode: " + $ExitCode$
+if not($ExitCode$ = "0")
+  LogError "Fatal: setup returned exit code " + $ExitCode$
+  IsFatalError
+endif

@@ -1,0 +1,20 @@
+[Product]
+type: localboot
+id: wireshark
+name: Wireshark
+description: Kostenloses Netzwerkanalyse-Tool
+advice:
+version: 1.8.5
+packageVersion: 1.0
+setupScript: install.ins
+uninstallScript: remove.ins
+
+[ProductProperty]
+name: desktopicon
+description: Wireshark Desktop-Icon anlegen (yes/no)
+default: yes
+
+[ProductProperty]
+name: quicklaunchicon
+description: Wireshark Quickstart-Icon anlegen (yes/no)
+default: no
